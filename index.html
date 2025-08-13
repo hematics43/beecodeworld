@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Honeycomb Menu with Logo & Bees</title>
+<style>
+:root {
+    --hex-size: 120px;
+    --small-hex-size: 70px;
+}
+body {
+    animation: bgChange 15s infinite alternate ease-in-out;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    overflow-x: hidden;
+}
+/* Background color animation */
+@keyframes bgChange {
+    0%   { background: #111; }
+    20%  { background: #222244; }
+    40%  { background: #333311; }
+    60%  { background: #112233; }
+    80%  { background: #331122; }
+    100% { background: #111; }
+}
+
+/* Logo */
+.logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 10px;
+    animation: buzz 2s infinite alternate;
+}
+@keyframes buzz {
+    0% { transform: rotate(0deg) scale(1); }
+    100% { transform: rotate(2deg) scale(1.05); }
+}
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: glow 3s infinite alternate;
+}
+@keyframes glow {
+    0%   { color: #ffcc00; text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffaa00; }
+    50%  { color: #33cc33; text-shadow: 0 0 15px #33cc33, 0 0 30px #3399ff; }
+    100% { color: #ff4d4d; text-shadow: 0 0 10px #ff4d4d, 0 0 20px #cc33ff; }
+}
+
+.honeycomb {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.row {
+    display: flex;
+}
+.row.offset {
+    margin-left: calc(var(--hex-size) / 2);
+}
+
+/* Hex style */
+.hex {
+    position: relative;
+    width: var(--hex-size);
+    height: calc(var(--hex-size) * 0.866);
+    clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    text-shadow: 0 0 5px #000;
+    animation: colorChange 6s infinite linear;
+    transition: transform 0.3s ease;
+    text-align: center;
+    padding: 10px;
+}
+.hex:hover {
+    transform: scale(1.1);
+}
+
+/* Color animation for hexagons */
+@keyframes colorChange {
+    0%   { background: #ff4d4d; }
+    20%  { background: #ffcc00; }
+    40%  { background: #33cc33; }
+    60%  { background: #3399ff; }
+    80%  { background: #cc33ff; }
+    100% { background: #ff4d4d; }
+}
+
+/* Bees */
+.bee {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Honeybee_luc_viatour.svg/1024px-Honeybee_luc_viatour.svg.png') no-repeat center/contain;
+    animation: fly 8s linear infinite;
+}
+.bee:nth-child(odd) { animation-delay: 2s; }
+@keyframes fly {
+    0%   { transform: translate(-50vw, -10vh) rotate(0deg); }
+    25%  { transform: translate(50vw, 20vh) rotate(45deg); }
+    50%  { transform: translate(20vw, 50vh) rotate(90deg); }
+    75%  { transform: translate(-30vw, 30vh) rotate(135deg); }
+    100% { transform: translate(-50vw, -10vh) rotate(180deg); }
+}
+.save-bees {
+    margin-top: 40px;
+    font-size: 1.5rem;
+    color: #ffcc00;
+    text-align: center;
+    animation: beeGlow 3s infinite alternate;
+    text-shadow: 0 0 5px #ffcc00, 0 0 15px #ffaa00;
+}
+@keyframes beeGlow {
+    0%   { color: #ffcc00; text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffaa00; }
+    50%  { color: #33cc33; text-shadow: 0 0 15px #33cc33, 0 0 30px #3399ff; }
+    100% { color: #ff4d4d; text-shadow: 0 0 10px #ff4d4d, 0 0 20px #cc33ff; }
+}
+
+/* Site Name */
+.site-name {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    animation: glow 3s infinite alternate;
+}
+
+/* Tagline */
+.tagline {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    color: #ccc;
+    font-style: italic;
+}
+
+@keyframes glow {
+    0%   { color: #ffcc00; text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffaa00; }
+    50%  { color: #33cc33; text-shadow: 0 0 15px #33cc33, 0 0 30px #3399ff; }
+    100% { color: #ff4d4d; text-shadow: 0 0 10px #ff4d4d, 0 0 20px #cc33ff; }
+}
+
+.honeycomb {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.row {
+    display: flex;
+}
+.row.offset {
+    margin-left: calc(var(--hex-size) / 2);
+}
+
+/* Main hex menu */
+.hex {
+    position: relative;
+    width: var(--hex-size);
+    height: calc(var(--hex-size) * 0.866);
+    clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    text-shadow: 0 0 5px #000;
+    animation: colorChange 6s infinite linear;
+    transition: transform 0.3s ease;
+    text-align: center;
+    padding: 10px;
+}
+.hex:hover {
+    transform: scale(1.1);
+}
+
+/* Small hex for social icons */
+.small-hex {
+    width: var(--small-hex-size);
+    height: calc(var(--small-hex-size) * 0.866);
+    clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #444;
+    animation: colorChange 6s infinite linear;
+    transition: transform 0.3s ease;
+}
+.small-hex img {
+    width: 50%;
+    height: 50%;
+    filter: invert(1);
+}
+.small-hex:hover {
+    transform: scale(1.15);
+}
+
+/* Color animation */
+@keyframes colorChange {
+    0%   { background: #ff4d4d; }
+    20%  { background: #ffcc00; }
+    40%  { background: #33cc33; }
+    60%  { background: #3399ff; }
+    80%  { background: #cc33ff; }
+    100% { background: #ff4d4d; }
+}
+
+/* Bees */
+.bee {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Honeybee_luc_viatour.svg/1024px-Honeybee_luc_viatour.svg.png') no-repeat center/contain;
+    pointer-events: none;
+}
+.bee1 { animation: fly1 12s linear infinite; }
+.bee2 { animation: fly2 10s linear infinite; }
+.bee3 { animation: fly3 14s linear infinite; }
+.bee4 { animation: fly4 16s linear infinite; }
+
+@keyframes fly1 {
+    0%   { transform: translate(-50vw, -10vh) rotate(0deg); }
+    25%  { transform: translate(50vw, 20vh) rotate(45deg); }
+    50%  { transform: translate(20vw, 50vh) rotate(90deg); }
+    75%  { transform: translate(-30vw, 30vh) rotate(135deg); }
+    100% { transform: translate(-50vw, -10vh) rotate(180deg); }
+}
+@keyframes fly2 {
+    0%   { transform: translate(40vw, 100vh) rotate(0deg); }
+    25%  { transform: translate(-20vw, 60vh) rotate(-45deg); }
+    50%  { transform: translate(30vw, 30vh) rotate(-90deg); }
+    75%  { transform: translate(60vw, 70vh) rotate(-135deg); }
+    100% { transform: translate(40vw, 100vh) rotate(-180deg); }
+}
+@keyframes fly3 {
+    0%   { transform: translate(-60vw, 60vh) rotate(0deg); }
+    25%  { transform: translate(0vw, 0vh) rotate(45deg); }
+    50%  { transform: translate(60vw, -20vh) rotate(90deg); }
+    75%  { transform: translate(30vw, 60vh) rotate(135deg); }
+    100% { transform: translate(-60vw, 60vh) rotate(180deg); }
+}
+@keyframes fly4 {
+    0%   { transform: translate(20vw, -30vh) rotate(0deg); }
+    25%  { transform: translate(-40vw, 10vh) rotate(45deg); }
+    50%  { transform: translate(40vw, 50vh) rotate(90deg); }
+    75%  { transform: translate(10vw, 20vh) rotate(135deg); }
+    100% { transform: translate(20vw, -30vh) rotate(180deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- Logo & Site Info -->
+<img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Honeybee_luc_viatour.svg/1024px-Honeybee_luc_viatour.svg.png" alt="Logo">
+<div class="site-name">My Bee World</div>
+<div class="tagline">Sweet Connections in Every Cell 🐝</div>
+
+<!-- Main honeycomb menu -->
+<div class="honeycomb">
+    <div class="row">
+        <a href="https://link1.com" class="hex">Home</a>
+        <a href="https://link2.com" class="hex">About</a>
+        <a href="https://link3.com" class="hex">Services</a>
+        <a href="https://link4.com" class="hex">Portfolio</a>
+    </div>
+    <div class="row offset">
+        <a href="https://link5.com" class="hex">Blog</a>
+        <a href="https://link6.com" class="hex">Gallery</a>
+        <a href="https://link7.com" class="hex">Shop</a>
+    </div>
+    <div class="row">
+        <a href="https://link8.com" class="hex">Contact</a>
+        <a href="https://link9.com" class="hex">FAQ</a>
+        <a href="https://link10.com" class="hex">Testimonials</a>
+        <a href="https://link11.com" class="hex">Support</a>
+    </div>
+</div>
+
+<!-- Social media honeycomb -->
+<h2 style="margin-top:40px;">Follow Me</h2>
+<div class="honeycomb">
+    <div class="row">
+        <a href="https://facebook.com" class="small-hex"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"></a>
+        <a href="https://instagram.com" class="small-hex"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram"></a>
+        <a href="https://twitter.com" class="small-hex"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter"></a>
+        <a href="https://youtube.com" class="small-hex"><img src="https://cdn-icons-png.flaticon.com/512/733/733646.png" alt="YouTube"></a>
+    </div>
+</div>
+
+<!-- Bees -->
+<div class="bee bee1"></div>
+<div class="bee bee2"></div>
+<div class="bee bee3"></div>
+<div class="bee bee4"></div>
+<!-- Add at the bottom of <body> before closing tag -->
+<div class="save-bees">🌼 Save Bees, Save Life 🐝</div>
+
+</body>
+</html>
