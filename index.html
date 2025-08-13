@@ -255,6 +255,53 @@ h1 {
     75%  { transform: translate(10vw, 20vh) rotate(135deg); }
     100% { transform: translate(20vw, -30vh) rotate(180deg); }
 }
+@media (max-width: 768px) {
+    :root {
+        --hex-size: 90px;
+        --small-hex-size: 55px;
+    }
+    body {
+        padding: 10px;
+    }
+    .logo {
+        width: 80px;
+        margin-bottom: 5px;
+    }
+    .site-name {
+        font-size: 2rem;
+    }
+    .tagline {
+        font-size: 1rem;
+    }
+    .hex {
+        font-size: 0.8rem;
+        padding: 5px;
+    }
+    .save-bees {
+        font-size: 1.2rem;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --hex-size: 70px;
+        --small-hex-size: 45px;
+    }
+    .site-name {
+        font-size: 1.5rem;
+    }
+    .tagline {
+        font-size: 0.9rem;
+    }
+    .hex {
+        font-size: 0.7rem;
+        padding: 3px;
+    }
+    h2 {
+        font-size: 1.2rem;
+    }
+}
 </style>
 </head>
 <body>
