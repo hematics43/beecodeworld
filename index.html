@@ -302,6 +302,122 @@ h1 {
         font-size: 1.2rem;
     }
 }
+ .buzzbee-btn {
+    position: relative;
+    padding: 15px 50px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, #ffb300, #ffcc00, #ff9900);
+    background-size: 200% 200%;
+    animation: buzzbee-bg 6s ease infinite, buzzbee-glow 2s ease-in-out infinite alternate;
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.7), 0 0 40px rgba(255, 153, 0, 0.5);
+    transition: transform 0.25s ease;
+    overflow: hidden;
+  }
+
+  /* Hover Shine */
+  .buzzbee-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.25);
+    transform: skewX(-20deg);
+  }
+  .buzzbee-btn:hover::after {
+    animation: buzzbee-shine 0.8s forwards;
+  }
+
+  .buzzbee-btn:hover {
+    transform: scale(1.08);
+  }
+
+  .buzzbee-icon {
+    font-size: 28px;
+    animation: buzzbee-buzz 0.6s infinite alternate ease-in-out;
+  }
+
+  /* Animations */
+  @keyframes buzzbee-bg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes buzzbee-glow {
+    from { box-shadow: 0 0 15px #ffcc00, 0 0 25px #ff9900; }
+    to   { box-shadow: 0 0 30px #ffcc00, 0 0 60px #ff9900; }
+  }
+
+  @keyframes buzzbee-buzz {
+    from { transform: translateY(0) rotate(0deg); }
+    to   { transform: translateY(-4px) rotate(6deg); }
+  }
+
+  @keyframes buzzbee-shine {
+    from { left: -100%; }
+    to { left: 120%; }
+  }
+  .follow-glow {
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 40px;
+    color: #ffcc00;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    animation: glowPulse 2s ease-in-out infinite alternate;
+  }
+
+  /* Glow animation */
+  @keyframes glowPulse {
+    from {
+      text-shadow: 0 0 5px #ffcc00,
+                   0 0 10px #ffb300,
+                   0 0 20px #ff9900;
+      color: #fff176;
+    }
+    to {
+      text-shadow: 0 0 15px #ffcc00,
+                   0 0 30px #ffb300,
+                   0 0 45px #ff9900;
+      color: #ffeb3b;
+    }
+  }
+
+  /* Shine sweep effect */
+  .follow-glow::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent
+    );
+    animation: shineSweep 3s infinite;
+  }
+
+  @keyframes shineSweep {
+    from { left: -100%; }
+    to   { left: 120%; }
+  }
 </style>
 </head>
 <body>
@@ -347,12 +463,16 @@ h1 {
 <a href="https://hematics43.github.io/Infinity-Traveling-in-Space/" class="hex" target="_blank" rel="noopener noreferrer">🌿</a>
    </div>
     <div class="row offset">
+        <a href="https://hematics43.github.io/cyber-simulator/" class="hex" target="_blank" rel="noopener noreferrer">🌏</a>     
         <a href="####" class="hex" target="_blank" rel="noopener noreferrer">Coming Soon🐝 🐝 🐝 </a>
     </div>
-</div>
+</div><BR>
+<button class="buzzbee-btn">
+  <span class="buzzbee-icon">🐝</span> wE UPLOAD dAILY
+</button>
 
 <!-- Social media honeycomb -->
-<h2 style="margin-top:40px;">Follow Me</h2>
+<h2 class="follow-glow">Follow Me</h2>
 <div class="honeycomb">
     <div class="row">
         <a href="https://www.whatsapp.com/channel/0029Vb6oH5pIHphDNQGIyt0s" class="small-hex">☀️</a>
@@ -369,7 +489,21 @@ h1 {
 <!-- Add at the bottom of <body> before closing tag -->
     <div class="save-bees">🐝 🍯 🌻 🌼 🌸 🌺 🍀 🌹 💛 🪻 🥀 🌷 🌾 🌱 🌿 🪴 🌳 🌲 🌵 🌴 🌎 🌍 🌏 ☀️ 🌞 ✨ 🐞 🦋 🐜 🐛 🪲 🪳 🦟 🦗 🕷️ 🕸️
 </div>
-<div class="save-bees">🌼 Save Bees, Save Life 🐝</div>
-
+<div class="save-bees" onclick="showInfo()">
+  🌼 Save Bees, Save Life 🐝
+  <p id="bee-info" style="display:none;">
+    Bees are vital for pollinating plants, which helps produce fruits, vegetables, and flowers. Without them, our ecosystems and food supply would be in danger. Protecting bees means protecting life on Earth!
+  </p>
+</div>
+<script>
+  function showInfo() {
+    const info = document.getElementById("bee-info");
+    if (info.style.display === "none") {
+      info.style.display = "block";
+    } else {
+      info.style.display = "none";
+    }
+  }
+</script>
 </body>
 </html>
