@@ -2,548 +2,198 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bee Code World</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Travel in time, just move</title>
 <style>
-:root {
-    --hex-size: 120px;
-    --small-hex-size: 70px;
-}
-body {
-    animation: bgChange 15s infinite alternate ease-in-out;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    overflow-x: hidden;
-}
-/* Background color animation */
-@keyframes bgChange {
-    0%   { background: #111; }
-    20%  { background: #222244; }
-    40%  { background: #333311; }
-    60%  { background: #112233; }
-    80%  { background: #331122; }
-    100% { background: #111; }
-}
-
-/* Logo */
-.logo {
-    width: 120px;
-    height: auto;
-    margin-bottom: 10px;
-    animation: buzz 2s infinite alternate;
-}
-@keyframes buzz {
-    0% { transform: rotate(0deg) scale(1); }
-    100% { transform: rotate(2deg) scale(1.05); }
-}
-h1 {
-    font-size: 2.5rem;
-    text-align: center;
-    margin-bottom: 20px;
-    animation: glow 3s infinite alternate;
-}
-@keyframes glow {
-    0%   { color: #ffcc00; text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffaa00; }
-    50%  { color: #33cc33; text-shadow: 0 0 15px #33cc33, 0 0 30px #3399ff; }
-    100% { color: #ff4d4d; text-shadow: 0 0 10px #ff4d4d, 0 0 20px #cc33ff; }
-}
-
-.honeycomb {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.row {
-    display: flex;
-}
-.row.offset {
-    margin-left: calc(var(--hex-size) / 2);
-}
-
-/* Hex style */
-.hex {
-    position: relative;
-    width: var(--hex-size);
-    height: calc(var(--hex-size) * 0.866);
-    clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
+  body {
+    margin: 0;
+    background: #05060a;
     color: #fff;
-    font-weight: bold;
-    font-size: 1rem;
-    text-shadow: 0 0 5px #000;
-    animation: colorChange 6s infinite linear;
-    transition: transform 0.3s ease;
-    text-align: center;
-    padding: 10px;
-}
-.hex:hover {
-    transform: scale(1.1);
-}
-
-/* Color animation for hexagons */
-@keyframes colorChange {
-    0%   { background: #ff4d4d; }
-    20%  { background: #ffcc00; }
-    40%  { background: #33cc33; }
-    60%  { background: #3399ff; }
-    80%  { background: #cc33ff; }
-    100% { background: #ff4d4d; }
-}
-
-/* Bees */
-.bee {
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Honeybee_luc_viatour.svg/1024px-Honeybee_luc_viatour.svg.png') no-repeat center/contain;
-    animation: fly 8s linear infinite;
-}
-.bee:nth-child(odd) { animation-delay: 2s; }
-@keyframes fly {
-    0%   { transform: translate(-50vw, -10vh) rotate(0deg); }
-    25%  { transform: translate(50vw, 20vh) rotate(45deg); }
-    50%  { transform: translate(20vw, 50vh) rotate(90deg); }
-    75%  { transform: translate(-30vw, 30vh) rotate(135deg); }
-    100% { transform: translate(-50vw, -10vh) rotate(180deg); }
-}
-.save-bees {
-    margin-top: 40px;
-    font-size: 1.5rem;
-    color: #ffcc00;
-    text-align: center;
-    animation: beeGlow 3s infinite alternate;
-    text-shadow: 0 0 5px #ffcc00, 0 0 15px #ffaa00;
-}
-@keyframes beeGlow {
-    0%   { color: #ffcc00; text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffaa00; }
-    50%  { color: #33cc33; text-shadow: 0 0 15px #33cc33, 0 0 30px #3399ff; }
-    100% { color: #ff4d4d; text-shadow: 0 0 10px #ff4d4d, 0 0 20px #cc33ff; }
-}
-
-/* Site Name */
-.site-name {
-    font-size: 2.8rem;
-    font-weight: bold;
-    margin-bottom: 5px;
-    animation: glow 3s infinite alternate;
-}
-
-/* Tagline */
-.tagline {
-    font-size: 1.2rem;
-    margin-bottom: 25px;
-    color: #ccc;
-    font-style: italic;
-}
-
-@keyframes glow {
-    0%   { color: #ffcc00; text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffaa00; }
-    50%  { color: #33cc33; text-shadow: 0 0 15px #33cc33, 0 0 30px #3399ff; }
-    100% { color: #ff4d4d; text-shadow: 0 0 10px #ff4d4d, 0 0 20px #cc33ff; }
-}
-
-.honeycomb {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.row {
-    display: flex;
-}
-.row.offset {
-    margin-left: calc(var(--hex-size) / 2);
-}
-
-/* Main hex menu */
-.hex {
-    position: relative;
-    width: var(--hex-size);
-    height: calc(var(--hex-size) * 0.866);
-    clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: #fff;
-    font-weight: bold;
-    font-size: 1rem;
-    text-shadow: 0 0 5px #000;
-    animation: colorChange 6s infinite linear;
-    transition: transform 0.3s ease;
-    text-align: center;
-    padding: 10px;
-}
-.hex:hover {
-    transform: scale(1.1);
-}
-
-/* Small hex for social icons */
-.small-hex {
-    width: var(--small-hex-size);
-    height: calc(var(--small-hex-size) * 0.866);
-    clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #444;
-    animation: colorChange 6s infinite linear;
-    transition: transform 0.3s ease;
-}
-.small-hex img {
-    width: 50%;
-    height: 50%;
-    filter: invert(1);
-}
-.small-hex:hover {
-    transform: scale(1.15);
-}
-
-/* Color animation */
-@keyframes colorChange {
-    0%   { background: #ff4d4d; }
-    20%  { background: #ffcc00; }
-    40%  { background: #33cc33; }
-    60%  { background: #3399ff; }
-    80%  { background: #cc33ff; }
-    100% { background: #ff4d4d; }
-}
-
-/* Bees */
-.bee {
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Honeybee_luc_viatour.svg/1024px-Honeybee_luc_viatour.svg.png') no-repeat center/contain;
-    pointer-events: none;
-}
-.bee1 { animation: fly1 12s linear infinite; }
-.bee2 { animation: fly2 10s linear infinite; }
-.bee3 { animation: fly3 14s linear infinite; }
-.bee4 { animation: fly4 16s linear infinite; }
-
-@keyframes fly1 {
-    0%   { transform: translate(-50vw, -10vh) rotate(0deg); }
-    25%  { transform: translate(50vw, 20vh) rotate(45deg); }
-    50%  { transform: translate(20vw, 50vh) rotate(90deg); }
-    75%  { transform: translate(-30vw, 30vh) rotate(135deg); }
-    100% { transform: translate(-50vw, -10vh) rotate(180deg); }
-}
-@keyframes fly2 {
-    0%   { transform: translate(40vw, 100vh) rotate(0deg); }
-    25%  { transform: translate(-20vw, 60vh) rotate(-45deg); }
-    50%  { transform: translate(30vw, 30vh) rotate(-90deg); }
-    75%  { transform: translate(60vw, 70vh) rotate(-135deg); }
-    100% { transform: translate(40vw, 100vh) rotate(-180deg); }
-}
-@keyframes fly3 {
-    0%   { transform: translate(-60vw, 60vh) rotate(0deg); }
-    25%  { transform: translate(0vw, 0vh) rotate(45deg); }
-    50%  { transform: translate(60vw, -20vh) rotate(90deg); }
-    75%  { transform: translate(30vw, 60vh) rotate(135deg); }
-    100% { transform: translate(-60vw, 60vh) rotate(180deg); }
-}
-@keyframes fly4 {
-    0%   { transform: translate(20vw, -30vh) rotate(0deg); }
-    25%  { transform: translate(-40vw, 10vh) rotate(45deg); }
-    50%  { transform: translate(40vw, 50vh) rotate(90deg); }
-    75%  { transform: translate(10vw, 20vh) rotate(135deg); }
-    100% { transform: translate(20vw, -30vh) rotate(180deg); }
-}
-@media (max-width: 768px) {
-    :root {
-        --hex-size: 90px;
-        --small-hex-size: 55px;
-    }
-    body {
-        padding: 10px;
-    }
-    .logo {
-        width: 80px;
-        margin-bottom: 5px;
-    }
-    .site-name {
-        font-size: 2rem;
-    }
-    .tagline {
-        font-size: 1rem;
-    }
-    .hex {
-        font-size: 0.8rem;
-        padding: 5px;
-    }
-    .save-bees {
-        font-size: 1.2rem;
-        margin-top: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    :root {
-        --hex-size: 70px;
-        --small-hex-size: 45px;
-    }
-    .site-name {
-        font-size: 1.5rem;
-    }
-    .tagline {
-        font-size: 0.9rem;
-    }
-    .hex {
-        font-size: 0.7rem;
-        padding: 3px;
-    }
-    h2 {
-        font-size: 1.2rem;
-    }
-}
- .buzzbee-btn {
-    position: relative;
-    padding: 5px 10px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #c01818;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: linear-gradient(135deg, #ffb300, #ffcc00, #ff9900);
-    background-size: 200% 200%;
-    animation: buzzbee-bg 6s ease infinite, buzzbee-glow 2s ease-in-out infinite alternate;
-    box-shadow: 0 0 20px rgba(255, 204, 0, 0.7), 0 0 40px rgba(255, 153, 0, 0.5);
-    transition: transform 0.25s ease;
+    font-family: sans-serif;
     overflow: hidden;
+    touch-action: none; /* stop scroll during drag */
   }
-
-  /* Hover Shine */
-  .buzzbee-btn::after {
-    content: "";
+  canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, #0a0c16, #05060a);
+  }
+  #speedControl {
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 50%;
-    background: rgba(153, 144, 235, 0.25);
-    transform: skewX(-20deg);
-  }
-  .buzzbee-btn:hover::after {
-    animation: buzzbee-shine 0.8s forwards;
-  }
-
-  .buzzbee-btn:hover {
-    transform: scale(1.08);
-  }
-
-  .buzzbee-icon {
-    font-size: 28px;
-    animation: buzzbee-buzz 0.6s infinite alternate ease-in-out;
-  }
-
-  /* Animations */
-  @keyframes buzzbee-bg {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  @keyframes buzzbee-glow {
-    from { box-shadow: 0 0 15px #ffcc00, 0 0 25px #ff9900; }
-    to   { box-shadow: 0 0 30px #ffcc00, 0 0 60px #ff9900; }
-  }
-
-  @keyframes buzzbee-buzz {
-    from { transform: translateY(0) rotate(0deg); }
-    to   { transform: translateY(-4px) rotate(6deg); }
-  }
-
-  @keyframes buzzbee-shine {
-    from { left: -100%; }
-    to { left: 120%; }
-  }
-  .follow-glow {
-    font-size: 36px;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 40px;
-    color: #ffcc00;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    position: relative;
-    animation: glowPulse 2s ease-in-out infinite alternate;
-  }
-
-  /* Glow animation */
-  @keyframes glowPulse {
-    from {
-      text-shadow: 0 0 5px #ffcc00,
-                   0 0 10px #ffb300,
-                   0 0 20px #ff9900;
-      color: #fff176;
-    }
-    to {
-      text-shadow: 0 0 15px #ffcc00,
-                   0 0 30px #ffb300,
-                   0 0 45px #ff9900;
-      color: #ffeb3b;
-    }
-  }
-
-  /* Shine sweep effect */
-  .follow-glow::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      120deg,
-      transparent,
-      rgba(255, 255, 255, 0.6),
-      transparent
-    );
-    animation: shineSweep 3s infinite;
+  }
+  #speedLabel {
+    position: absolute;
+    bottom: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 200%;
+    color: #ccc;
   }
 
-  @keyframes shineSweep {
-    from { left: -100%; }
-    to   { left: 120%; }
+  /* heading styles */
+  :root { --accent1:#56d4ff; --accent2:#7b6cff; --text:#e8eef8; }
+  .heading-wrap { text-align:center; padding:20px; position:absolute; top:10px; left:50%; transform:translateX(-50%); }
+  .super-title { font-size:clamp(22px,5vw,40px); font-weight:800; color:var(--text); margin:0; position:relative; }
+  .super-title::after {
+    content:""; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%);
+    width:60%; height:5px; border-radius:999px;
+    background:linear-gradient(90deg,var(--accent1),var(--accent2));
+    animation:pulse 2.6s infinite;
+  }
+  @keyframes pulse {
+    0%{transform:translateX(-50%) scaleX(.9);opacity:.7}
+    50%{transform:translateX(-50%) scaleX(1.1);opacity:1}
+    100%{transform:translateX(-50%) scaleX(.9);opacity:.7}
   }
 </style>
 </head>
 <body>
-
-<!-- Logo & Site Info -->
-<img class="logo" src="logohead.png" alt="Logo">
-<div class="site-name">Bee Code World</div>
-<div class="tagline">Sweet Connections in Every Cell 🐝 just click!</div>
-
-<!-- Main honeycomb menu -->
-<div class="honeycomb">
-    <div class="row">
-<a href="https://hematics43.github.io/Tower-of-Hanoi/" class="hex" target="_blank" rel="noopener noreferrer">🍯</a>
-<a href="https://hematics43.github.io/EMOJI-MATCH-GAME/" class="hex" target="_blank" rel="noopener noreferrer">🌻</a>
-<a href="https://hematics43.github.io/-Live-Code-Editor-2.1/" class="hex" target="_blank" rel="noopener noreferrer">🌼</a>
-<a href="https://hematics43.github.io/Glowing-Tile-Match-Game/" class="hex" target="_blank" rel="noopener noreferrer">🌸</a>
-<a href="https://hematics43.github.io/HTML-Live-Editor-2.0/" class="hex" target="_blank" rel="noopener noreferrer">🌺</a>
-    </div>
-    <div class="row offset">
- <a href="https://hematics43.github.io/love_letter-1.0/" class="hex" target="_blank" rel="noopener noreferrer">🐝</a>
-<a href="https://hematics43.github.io/SUDOKU-MAKER-1.0/" class="hex" target="_blank" rel="noopener noreferrer">🍀</a>
-<a href="https://hematics43.github.io/Dowry-Calculator/" class="hex" target="_blank" rel="noopener noreferrer">🌹</a>
-<a href="https://hematics43.github.io/RPS-GOD-ARENA/" class="hex" target="_blank" rel="noopener noreferrer">💛</a>
-    </div>
-    <div class="row">
-<a href="https://hematics43.github.io/SYMMETRIC-WORLD/" class="hex" target="_blank" rel="noopener noreferrer">🌲</a>
-<a href="https://hematics43.github.io/findpath/" class="hex" target="_blank" rel="noopener noreferrer">🥀</a>
-<a href="https://hematics43.github.io/Emojis-Balls-UI/" class="hex" target="_blank" rel="noopener noreferrer">🌷</a>
-<a href="https://hematics43.github.io/Gravity-Drop-Simulation/" class="hex" target="_blank" rel="noopener noreferrer">🌾</a>
-<a href="https://hematics43.github.io/Substitution-Cipher/" class="hex" target="_blank" rel="noopener noreferrer">🌱</a>
-    </div>
-    <div class="row offset">
-<a href="https://hematics43.github.io/bar-0.1/" class="hex" target="_blank" rel="noopener noreferrer">🌿</a>
-<a href="https://hematics43.github.io/memory-book/" class="hex" target="_blank" rel="noopener noreferrer">🌷</a>
-<a href="https://hematics43.github.io/Universal-Base-Converter-Calculator/" class="hex" target="_blank" rel="noopener noreferrer">🌳</a>
-<a href="https://hematics43.github.io/Binary-Clock/" class="hex" target="_blank" rel="noopener noreferrer">🌲</a>
-    </div>
-   <div class="row">
-<a href="https://hematics43.github.io/constellation-link/" class="hex" target="_blank" rel="noopener noreferrer">🌲</a>
-<a href="https://hematics43.github.io/login01/" class="hex" target="_blank" rel="noopener noreferrer">🌱</a>
-<a href="https://hematics43.github.io/Sorting-Visualizer-1.0/" class="hex" target="_blank" rel="noopener noreferrer">🥀</a>
-<a href="https://hematics43.github.io/poly_snake/" class="hex" target="_blank" rel="noopener noreferrer">🕷️</a>
-<a href="https://hematics43.github.io/Infinity-Traveling-in-Space/" class="hex" target="_blank" rel="noopener noreferrer">🌿</a>
-   </div>
-    <div class="row offset">
-        <a href="https://hematics43.github.io/cyber-simulator/" class="hex" target="_blank" rel="noopener noreferrer">🌏</a> 
-        <a href="https://hematics43.github.io/hologram-Card-1.0/" class="hex" target="_blank" rel="noopener noreferrer">🦗</a>     
-        <a href="https://hematics43.github.io/NEURAL-SUPERCOMPUTER/" class="hex" target="_blank" rel="noopener noreferrer">🐞</a>     
-        <a href="####" class="hex" target="_blank" rel="noopener noreferrer">Coming Soon🐝 🐝 🐝 </a>
-    </div>
-</div><BR>
-<button class="buzzbee-btn">
-  <span class="buzzbee-icon">🐝</span>New Added<span class="buzzbee-icon">🌱</span>
-</button>
-
-<!-- Social media honeycomb -->
-<h2 class="follow-glow">Follow Me</h2>
-<div class="honeycomb">
-    <div class="row">
-        <a href="https://www.whatsapp.com/channel/0029Vb6oH5pIHphDNQGIyt0s" class="small-hex">☀️</a>
-        <a href="https://www.instagram.com/beecodeworld/" class="small-hex">🌹</a>
-        
-    </div>
-</div>
-
-<!-- Bees -->
-<div class="bee bee1"></div>
-<div class="bee bee2"></div>
-<div class="bee bee3"></div>
-<div class="bee bee4"></div>
-<!-- Add at the bottom of <body> before closing tag -->
+  <div class="heading-wrap">
+    <h1 class="super-title">Travel in time, just move</h1>
     
- <div class="save-bees">
-  <span class="buzzbee-icon">🐝</span>
-  <span class="buzzbee-icon">🍯</span>
-  <span class="buzzbee-icon">🌻</span>
-  <span class="buzzbee-icon">🌼</span>
-  <span class="buzzbee-icon">🌸</span>
-  <span class="buzzbee-icon">🌺</span>
-  <span class="buzzbee-icon">🍀</span>
-  <span class="buzzbee-icon">🌹</span>
-  <span class="buzzbee-icon">💛</span>
-  <span class="buzzbee-icon">🪻</span>
-  <span class="buzzbee-icon">🥀</span>
-  <span class="buzzbee-icon">🌷</span>
-  <span class="buzzbee-icon">🌾</span>
-  <span class="buzzbee-icon">🌱</span>
-  <span class="buzzbee-icon">🌿</span>
-  <span class="buzzbee-icon">🪴</span>
-  <span class="buzzbee-icon">🌳</span>
-  <span class="buzzbee-icon">🌲</span>
-  <span class="buzzbee-icon">🌵</span>
-  <span class="buzzbee-icon">🌴</span>
-  <span class="buzzbee-icon">🌎</span>
-  <span class="buzzbee-icon">🌍</span>
-  <span class="buzzbee-icon">🌏</span>
-  <span class="buzzbee-icon">☀️</span>
-  <span class="buzzbee-icon">🌞</span>
-  <span class="buzzbee-icon">✨</span>
-  <span class="buzzbee-icon">🐞</span>
-  <span class="buzzbee-icon">🦋</span>
-  <span class="buzzbee-icon">🐜</span>
-  <span class="buzzbee-icon">🐛</span>
-  <span class="buzzbee-icon">🪲</span>
-  <span class="buzzbee-icon">🪳</span>
-  <span class="buzzbee-icon">🦟</span>
-  <span class="buzzbee-icon">🦗</span>
-  <span class="buzzbee-icon">🕷️</span>
-  <span class="buzzbee-icon">🕸️</span>
-</div>
+      <div class="subtitle">When you move fast, time will slow. <h5>~Albert Einstein</h5></div>
+    <div>Double Tap | Drag Nodes | Control Speed</div>
+  </div> 
 
-<div class="save-bees" onclick="showInfo()">
-  🌼 Save Bees, Save Life 🐝
-  <p id="bee-info" style="display:none;">
-    Bees are vital for pollinating plants, which helps produce fruits, vegetables, and flowers. Without them, our ecosystems and food supply would be in danger. Protecting bees means protecting life on Earth!
-  </p>
-</div>
+<canvas id="flow"></canvas>
+<label id="speedLabel">⚡ Speed</label>
+<input type="range" min="1" max="500" value="80" id="speedControl">
+
 <script>
-  function showInfo() {
-    const info = document.getElementById("bee-info");
-    if (info.style.display === "none") {
-      info.style.display = "block";
-    } else {
-      info.style.display = "none";
-    }
+const canvas = document.getElementById("flow");
+const ctx = canvas.getContext("2d");
+resize();
+window.addEventListener("resize", resize);
+
+function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+
+// --- Data ---
+let nodes=[], edges=[];
+let dragging=null, hoverNode=null;
+let flowSpeed=0.008*8;
+const colors=["#00ffe0","#ff6b9f","#56d4ff","#7b6cff","#f5d742","#ff914d"];
+
+function resetNodes(){
+  nodes=[{x:100,y:200,w:100,h:50,label:"Unit",color:colors[0]}];
+  autoConnect();
+}
+resetNodes();
+
+function autoConnect(){
+  edges=[];
+  for(let i=0;i<nodes.length-1;i++){
+    edges.push({from:nodes[i],to:nodes[i+1]});
   }
+}
+
+// Particles
+let particles=Array.from({length:60},()=>({pos:Math.random(),edgeIndex:0}));
+
+// Helpers
+function findNode(x,y){
+  return nodes.find(n=>x>n.x&&x<n.x+n.w&&y>n.y&&y<n.y+n.h);
+}
+function deleteNode(node){ nodes=nodes.filter(n=>n!==node); autoConnect(); }
+function addNode(x,y){
+  let idx=nodes.length;
+  nodes.push({x:x-60,y:y-25,w:120,h:50,label:"Unit"+idx,color:colors[idx%colors.length]});
+  autoConnect();
+}
+
+// Mouse drag
+canvas.addEventListener("mousedown",e=>{
+  const mx=e.offsetX,my=e.offsetY;
+  const n=findNode(mx,my);
+  if(n){ dragging=n; dragging.dx=mx-n.x; dragging.dy=my-n.y; }
+});
+canvas.addEventListener("mousemove",e=>{
+  const mx=e.offsetX,my=e.offsetY;
+  hoverNode=findNode(mx,my);
+  if(dragging){ dragging.x=mx-dragging.dx; dragging.y=my-dragging.dy; }
+});
+canvas.addEventListener("mouseup",()=>dragging=null);
+
+// Touch drag
+canvas.addEventListener("touchstart",e=>{
+  const t=e.touches[0],mx=t.clientX,my=t.clientY;
+  const n=findNode(mx,my);
+  if(n){ dragging=n; dragging.dx=mx-n.x; dragging.dy=my-n.y; }
+});
+canvas.addEventListener("touchmove",e=>{
+  const t=e.touches[0],mx=t.clientX,my=t.clientY;
+  hoverNode=findNode(mx,my);
+  if(dragging){ dragging.x=mx-dragging.dx; dragging.y=my-dragging.dy; }
+});
+canvas.addEventListener("touchend",()=>dragging=null);
+
+// Double click add/delete (desktop)
+canvas.addEventListener("dblclick",e=>{
+  const n=findNode(e.offsetX,e.offsetY);
+  if(n) deleteNode(n); else addNode(e.offsetX,e.offsetY);
+});
+
+// Double tap add/delete (mobile)
+let lastTap=0,lastX=0,lastY=0;
+canvas.addEventListener("touchend",e=>{
+  const t=e.changedTouches[0],now=Date.now();
+  const x=t.clientX,y=t.clientY;
+  if(now-lastTap<300 && Math.abs(x-lastX)<30 && Math.abs(y-lastY)<30){
+    const n=findNode(x,y);
+    if(n) deleteNode(n); else addNode(x,y);
+  }
+  lastTap=now; lastX=x; lastY=y;
+});
+
+// Speed control
+document.getElementById("speedControl").addEventListener("input",e=>{
+  flowSpeed=0.001*e.target.value;
+});
+
+// --- Drawing loop ---
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // edges
+  ctx.lineWidth=2.5;
+  for(let e of edges){
+    const ax=e.from.x+e.from.w/2,ay=e.from.y+e.from.h/2;
+    const bx=e.to.x+e.to.w/2,by=e.to.y+e.to.h/2;
+    const grad=ctx.createLinearGradient(ax,ay,bx,by);
+    grad.addColorStop(0,e.from.color); grad.addColorStop(1,e.to.color);
+    ctx.strokeStyle=grad; ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.stroke();
+  }
+
+  // particles
+  for(let p of particles){
+    const e=edges[p.edgeIndex]; if(!e) continue;
+    const ax=e.from.x+e.from.w/2,ay=e.from.y+e.from.h/2;
+    const bx=e.to.x+e.to.w/2,by=e.to.y+e.to.h/2;
+    const x=ax+(bx-ax)*p.pos,y=ay+(by-ay)*p.pos;
+    ctx.beginPath(); ctx.fillStyle="#fff"; ctx.shadowColor="#fff"; ctx.shadowBlur=12;
+    ctx.arc(x,y,4,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
+    p.pos+=flowSpeed; if(p.pos>1){p.pos=0;p.edgeIndex=Math.floor(Math.random()*edges.length);}
+  }
+
+  // nodes
+  for(let n of nodes){
+    ctx.fillStyle="rgba(255,255,255,0.07)";
+    ctx.strokeStyle=n.color;
+    ctx.lineWidth=(n===hoverNode?4:2);
+    ctx.beginPath();
+    ctx.roundRect(n.x,n.y,n.w,n.h,12);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle="#fff"; ctx.font="14px sans-serif"; ctx.textAlign="center";
+    ctx.fillText(n.label,n.x+n.w/2,n.y+n.h/2+5);
+  }
+
+  requestAnimationFrame(draw);
+}
+draw();
 </script>
 </body>
 </html>
