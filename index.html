@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<title>Bee Code World</title>
-
+<title>🐝 Bee Code World 🐝</title>
 <style>
 body{
   margin:0;
@@ -17,32 +16,21 @@ body{
   overflow:hidden;
 }
 
-/* ---------- TOP SCROLL BAR ---------- */
-#topbar{
-  display:flex;
-  align-items:center;
-  overflow-x:auto;
-  white-space:nowrap;
+/* ---------- HEADER ---------- */
+#header{
   background:#17212e;
   border-bottom:2px solid #4fc3f7;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   padding:6px 10px;
-  gap:8px;
-}
-#topbar::-webkit-scrollbar{
-  height:6px;
-}
-#topbar::-webkit-scrollbar-thumb{
-  background:#4fc3f7;
-  border-radius:4px;
 }
 
-/* logo */
+/* Logo + Title */
 #logo{
   display:flex;
   align-items:center;
   gap:8px;
-  margin-right:12px;
-  flex-shrink:0;
 }
 #logo img{
   width:38px;
@@ -52,12 +40,57 @@ body{
   background:#fff;
   padding:3px;
 }
-#logo span{
+#logo a{
+  text-decoration:none;
   font-size:18px;
   font-weight:700;
   color:#4fc3f7;
-  white-space:nowrap;
+  transition:0.2s;
 }
+#logo a:hover{color:#81d9ff;}
+
+/* Search bar (always visible) */
+#search-box{
+  display:flex;
+  align-items:center;
+  background:#22303d;
+  border-radius:6px;
+  padding:2px 6px;
+}
+#search-input{
+  background:transparent;
+  border:none;
+  color:#fff;
+  outline:none;
+  padding:6px;
+  width:140px;
+  font-size:14px;
+}
+#search-btn{
+  background:#4fc3f7;
+  color:#000;
+  border:none;
+  border-radius:4px;
+  padding:4px 7px;
+  cursor:pointer;
+  font-size:13px;
+  margin-left:4px;
+}
+#search-btn:hover{background:#81d9ff;}
+
+/* ---------- SCROLLABLE LINK BAR ---------- */
+#topbar{
+  display:flex;
+  align-items:center;
+  overflow-x:auto;
+  white-space:nowrap;
+  background:#17212e;
+  padding:6px 8px;
+  gap:8px;
+  border-bottom:1px solid #1d2735;
+}
+#topbar::-webkit-scrollbar{height:6px;}
+#topbar::-webkit-scrollbar-thumb{background:#4fc3f7;border-radius:4px;}
 
 /* link buttons */
 .link-btn{
@@ -137,9 +170,11 @@ iframe{
 
 /* ---------- MOBILE ---------- */
 @media(max-width:768px){
-  #logo span{font-size:16px;}
-  #logo img{width:32px;height:32px;}
+  #logo img{width:30px;height:30px;}
+  #logo a{font-size:16px;}
   .link-btn{font-size:13px;padding:6px 10px;}
+  #search-input{width:100px;font-size:12px;}
+  #search-btn{font-size:12px;padding:3px 6px;}
   #preview h1{font-size:36px;}
   #preview p{font-size:15px;}
 }
@@ -147,13 +182,21 @@ iframe{
 </head>
 
 <body>
-  <!-- Top scroll bar -->
-  <div id="topbar">
+  <!-- Header with logo + search -->
+  <div id="header">
     <div id="logo">
-      <img src="logohead.png" alt="Bee Code World Logo">
-      <span>Bee Code World</span>
+      <img src="logo.png" alt="Bee Code World Logo">
+      <a href="https://hematics43.github.io/beecodeworld/" id="home-link">Bee Code World</a>
+    </div>
+
+    <div id="search-box">
+      <input type="text" id="search-input" placeholder="Search...">
+      <button id="search-btn">🔍</button>
     </div>
   </div>
+
+  <!-- Scrollable project links -->
+  <div id="topbar"></div>
 
   <!-- Viewer area -->
   <div id="viewer">
@@ -166,18 +209,19 @@ iframe{
     <!-- Default preview -->
     <div id="preview">
       <h1>🐝 Bee Code World</h1>
-      <p>Select any project above to explore</p>
+      <p>Select any project above or search to explore 🚀</p>
     </div>
   </div>
 
 <script>
 // ------------------- LINKS -------------------
 const links=[
-  {name:"Love Letter",url:"https://hematics43.github.io/love_letter-1.0/"},
+  
   {name:"Tower of Hanoi",url:"https://hematics43.github.io/Tower-of-Hanoi/"},
   {name:"Emoji Match Game",url:"https://hematics43.github.io/EMOJI-MATCH-GAME/"},
   {name:"Live Code Editor 2.1",url:"https://hematics43.github.io/-Live-Code-Editor-2.1/"},
   {name:"Glowing Tile Match Game",url:"https://hematics43.github.io/Glowing-Tile-Match-Game/"},
+  {name:"Love Letter",url:"https://hematics43.github.io/love_letter-1.0/"},
   {name:"HTML Live Editor 2.0",url:"https://hematics43.github.io/HTML-Live-Editor-2.0/"},
   {name:"Sudoku Maker 1.0",url:"https://hematics43.github.io/SUDOKU-MAKER-1.0/"},
   {name:"Dowry Calculator",url:"https://hematics43.github.io/Dowry-Calculator/"},
@@ -199,6 +243,9 @@ const iframe=document.getElementById("iframe-viewer");
 const currentUrl=document.getElementById("current-url");
 const openBtn=document.getElementById("open-btn");
 const preview=document.getElementById("preview");
+const homeLink=document.getElementById("home-link");
+const searchInput=document.getElementById("search-input");
+const searchBtn=document.getElementById("search-btn");
 let activeIndex=-1;
 
 // create buttons in scroll bar
@@ -224,6 +271,28 @@ openBtn.onclick=()=>{
   if(activeIndex>=0) window.open(links[activeIndex].url,"_blank");
   else alert("Please select a project first!");
 };
+
+// home link resets preview
+homeLink.onclick=(e)=>{
+  e.preventDefault();
+  iframe.src="";
+  currentUrl.textContent="Select a project to view";
+  document.querySelectorAll(".link-btn").forEach(btn=>btn.classList.remove("active"));
+  preview.style.display="flex";
+  activeIndex=-1;
+};
+
+// search functionality
+function searchProjects(){
+  const q=searchInput.value.toLowerCase().trim();
+  const buttons=document.querySelectorAll(".link-btn");
+  buttons.forEach(btn=>{
+    if(btn.textContent.toLowerCase().includes(q)) btn.style.display="inline-block";
+    else btn.style.display="none";
+  });
+}
+searchBtn.onclick=searchProjects;
+searchInput.oninput=searchProjects;
 </script>
 </body>
 </html>
