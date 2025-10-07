@@ -329,10 +329,21 @@ function load(i,btn,color){
   activeIndex=i;
 }
 
-openBtn.onclick=()=>{
-  if(activeIndex>=0) window.open(links[activeIndex].url,"_blank");
-  else alert("Please select a project first!");
+openBtn.onclick = () => {
+  const activeBtn = document.querySelector(".link-btn.active");
+  if (activeBtn) {
+    const linkName = activeBtn.textContent.trim();
+    const link = links.find(l => l.name === linkName);
+    if (link && link.url) {
+      window.open(link.url, "_blank");
+    } else {
+      alert("Link not found!");
+    }
+  } else {
+    alert("Please select a project first!");
+  }
 };
+
 
 homeLink.onclick=(e)=>{
   e.preventDefault();
