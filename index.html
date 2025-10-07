@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>🐝 Bee Code World 🐝</title>
 <style>
+:root {
+  --accent: #4fc3f7; /* will be randomized via JS */
+}
+
 body{
   margin:0;
   font-family:"Segoe UI",Arial,sans-serif;
@@ -19,7 +23,7 @@ body{
 /* ---------- HEADER ---------- */
 #header{
   background:#17212e;
-  border-bottom:2px solid #4fc3f7;
+  border-bottom:2px solid var(--accent);
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -44,12 +48,12 @@ body{
   text-decoration:none;
   font-size:18px;
   font-weight:700;
-  color:#4fc3f7;
-  transition:0.2s;
+  color:var(--accent);
+  transition:0.3s;
 }
-#logo a:hover{color:#81d9ff;}
+#logo a:hover{color:#fff;}
 
-/* Search bar (always visible) */
+/* Search bar */
 #search-box{
   display:flex;
   align-items:center;
@@ -67,7 +71,7 @@ body{
   font-size:14px;
 }
 #search-btn{
-  background:#4fc3f7;
+  background:var(--accent);
   color:#000;
   border:none;
   border-radius:4px;
@@ -76,7 +80,7 @@ body{
   font-size:13px;
   margin-left:4px;
 }
-#search-btn:hover{background:#81d9ff;}
+#search-btn:hover{opacity:0.85;}
 
 /* ---------- SCROLLABLE LINK BAR ---------- */
 #topbar{
@@ -90,7 +94,7 @@ body{
   border-bottom:1px solid #1d2735;
 }
 #topbar::-webkit-scrollbar{height:6px;}
-#topbar::-webkit-scrollbar-thumb{background:#4fc3f7;border-radius:4px;}
+#topbar::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px;}
 
 /* link buttons */
 .link-btn{
@@ -101,11 +105,18 @@ body{
   padding:8px 12px;
   cursor:pointer;
   font-size:14px;
-  transition:0.2s;
+  transition:0.25s;
   flex-shrink:0;
 }
-.link-btn:hover{background:#2e4050;}
-.link-btn.active{background:#4fc3f7;color:#000;}
+.link-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 10px currentColor;
+}
+.link-btn.active{
+  background:currentColor;
+  color:#000;
+  font-weight:600;
+}
 
 /* ---------- VIEWER ---------- */
 #viewer{
@@ -124,7 +135,7 @@ body{
 }
 #urlbar span{color:#ccc;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 #open-btn{
-  background:#4fc3f7;
+  background:var(--accent);
   color:#000;
   border:none;
   border-radius:6px;
@@ -154,7 +165,7 @@ iframe{
 #preview h1{
   font-size:48px;
   margin:0;
-  color:#4fc3f7;
+  color:var(--accent);
   font-weight:800;
   animation:glow 3s ease-in-out infinite alternate;
 }
@@ -164,8 +175,8 @@ iframe{
   margin-top:10px;
 }
 @keyframes glow{
-  from{text-shadow:0 0 8px rgba(79,195,247,0.4);}
-  to{text-shadow:0 0 20px rgba(79,195,247,0.9);}
+  from{text-shadow:0 0 8px var(--accent);}
+  to{text-shadow:0 0 20px var(--accent);}
 }
 
 /* ---------- MOBILE ---------- */
@@ -185,7 +196,7 @@ iframe{
   <!-- Header with logo + search -->
   <div id="header">
     <div id="logo">
-      <img src="logo.png" alt="Bee Code World Logo">
+      <img src="logohead.png" alt="Bee Code World Logo">
       <a href="https://hematics43.github.io/beecodeworld/" id="home-link">Bee Code World</a>
     </div>
 
@@ -215,8 +226,7 @@ iframe{
 
 <script>
 // ------------------- LINKS -------------------
-const links=[
-  
+let links=[
   {name:"Tower of Hanoi",url:"https://hematics43.github.io/Tower-of-Hanoi/"},
   {name:"Emoji Match Game",url:"https://hematics43.github.io/EMOJI-MATCH-GAME/"},
   {name:"Live Code Editor 2.1",url:"https://hematics43.github.io/-Live-Code-Editor-2.1/"},
@@ -236,8 +246,19 @@ const links=[
   {name:"Universal Base Converter",url:"https://hematics43.github.io/Universal-Base-Converter-Calculator/"},
   {name:"Binary Clock",url:"https://hematics43.github.io/Binary-Clock/"}
 ];
-// --------------------------------------------
 
+// shuffle links
+links = links.sort(() => Math.random() - 0.5);
+
+// random accent for main UI
+const accentColors = ["#4fc3f7","#ff6ec7","#64ffda","#f9a825","#ff7043","#ba68c8","#00e676","#ff4081"];
+const accent = accentColors[Math.floor(Math.random()*accentColors.length)];
+document.documentElement.style.setProperty('--accent', accent);
+
+// random colors for each button
+const btnColors = ["#4fc3f7","#ff6ec7","#64ffda","#f9a825","#ff7043","#ba68c8","#00e676","#ff4081","#ffca28","#00bcd4","#ff5252","#9ccc65"];
+
+// build UI
 const topbar=document.getElementById("topbar");
 const iframe=document.getElementById("iframe-viewer");
 const currentUrl=document.getElementById("current-url");
@@ -248,21 +269,24 @@ const searchInput=document.getElementById("search-input");
 const searchBtn=document.getElementById("search-btn");
 let activeIndex=-1;
 
-// create buttons in scroll bar
 links.forEach((l,i)=>{
   const b=document.createElement("button");
   b.textContent=l.name;
   b.className="link-btn";
-  b.onclick=()=>load(i);
+  const color = btnColors[Math.floor(Math.random()*btnColors.length)];
+  b.style.color=color;
+  b.onclick=()=>load(i,b,color);
   topbar.appendChild(b);
 });
 
-function load(i){
+function load(i,btn,color){
   const {name,url}=links[i];
   iframe.src=url;
   currentUrl.textContent=`${name} — ${url}`;
   document.querySelectorAll(".link-btn").forEach(btn=>btn.classList.remove("active"));
-  document.querySelectorAll(".link-btn")[i].classList.add("active");
+  btn.classList.add("active");
+  btn.style.background=color;
+  btn.style.color="#000";
   preview.style.display="none";
   activeIndex=i;
 }
@@ -272,23 +296,23 @@ openBtn.onclick=()=>{
   else alert("Please select a project first!");
 };
 
-// home link resets preview
 homeLink.onclick=(e)=>{
   e.preventDefault();
   iframe.src="";
   currentUrl.textContent="Select a project to view";
-  document.querySelectorAll(".link-btn").forEach(btn=>btn.classList.remove("active"));
+  document.querySelectorAll(".link-btn").forEach(btn=>{
+    btn.classList.remove("active");
+    btn.style.background="#22303d";
+    btn.style.color="";
+  });
   preview.style.display="flex";
   activeIndex=-1;
 };
 
-// search functionality
 function searchProjects(){
   const q=searchInput.value.toLowerCase().trim();
-  const buttons=document.querySelectorAll(".link-btn");
-  buttons.forEach(btn=>{
-    if(btn.textContent.toLowerCase().includes(q)) btn.style.display="inline-block";
-    else btn.style.display="none";
+  document.querySelectorAll(".link-btn").forEach(btn=>{
+    btn.style.display=btn.textContent.toLowerCase().includes(q)?'inline-block':'none';
   });
 }
 searchBtn.onclick=searchProjects;
