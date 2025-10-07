@@ -6,92 +6,99 @@
 <title>Bee Code World</title>
 
 <style>
-/* ---------- BASIC LAYOUT ---------- */
 body{
   margin:0;
   font-family:"Segoe UI",Arial,sans-serif;
   background:#0f1720;
   color:#f1f1f1;
-  display:flex;
   height:100vh;
-  overflow:hidden;
-}
-#sidebar{
-  width:280px;
-  background:#17212e;
-  padding:15px;
-  box-sizing:border-box;
-  overflow-y:auto;
-  border-right:1px solid #1d2735;
-}
-#viewer{
-  flex:1;
   display:flex;
   flex-direction:column;
-  position:relative;
+  overflow:hidden;
 }
 
-/* ---------- SIDEBAR ---------- */
+/* ---------- TOP SCROLL BAR ---------- */
+#topbar{
+  display:flex;
+  align-items:center;
+  overflow-x:auto;
+  white-space:nowrap;
+  background:#17212e;
+  border-bottom:2px solid #4fc3f7;
+  padding:6px 10px;
+  gap:8px;
+}
+#topbar::-webkit-scrollbar{
+  height:6px;
+}
+#topbar::-webkit-scrollbar-thumb{
+  background:#4fc3f7;
+  border-radius:4px;
+}
+
+/* logo */
 #logo{
   display:flex;
   align-items:center;
-  gap:10px;
-  margin-bottom:12px;
+  gap:8px;
+  margin-right:12px;
+  flex-shrink:0;
 }
-#logo svg{
-  width:40px;height:40px;
-  background:#4fc3f7;
+#logo img{
+  width:38px;
+  height:38px;
   border-radius:50%;
-  padding:6px;
+  object-fit:cover;
+  background:#fff;
+  padding:3px;
 }
 #logo span{
   font-size:18px;
   font-weight:700;
   color:#4fc3f7;
+  white-space:nowrap;
 }
-h2{
-  font-size:16px;
-  margin:10px 0;
-  color:#89c9ff;
-}
+
+/* link buttons */
 .link-btn{
-  display:block;
-  width:100%;
-  text-align:left;
   background:#22303d;
   color:#fff;
-  padding:10px 12px;
   border:none;
   border-radius:6px;
-  margin-bottom:8px;
+  padding:8px 12px;
   cursor:pointer;
   font-size:14px;
   transition:0.2s;
+  flex-shrink:0;
 }
 .link-btn:hover{background:#2e4050;}
 .link-btn.active{background:#4fc3f7;color:#000;}
 
-/* ---------- TOP BAR ---------- */
-#topbar{
-  background:#17212e;
-  padding:10px 15px;
+/* ---------- VIEWER ---------- */
+#viewer{
+  flex:1;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+}
+#urlbar{
+  background:#182530;
+  padding:8px 12px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   border-bottom:1px solid #1d2735;
 }
-#topbar span{color:#ccc;font-size:14px;}
+#urlbar span{color:#ccc;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 #open-btn{
   background:#4fc3f7;
   color:#000;
   border:none;
   border-radius:6px;
-  padding:6px 10px;
+  padding:5px 9px;
   cursor:pointer;
   font-weight:bold;
 }
-
-/* ---------- IFRAME ---------- */
 iframe{
   flex:1;
   border:none;
@@ -99,7 +106,7 @@ iframe{
   background:#fff;
 }
 
-/* ---------- DEFAULT PREVIEW ---------- */
+/* ---------- PREVIEW ---------- */
 #preview{
   position:absolute;
   inset:0;
@@ -128,60 +135,38 @@ iframe{
   to{text-shadow:0 0 20px rgba(79,195,247,0.9);}
 }
 
-/* ---------- SCROLLBAR ---------- */
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-thumb{background:#4fc3f7;border-radius:4px;}
-
 /* ---------- MOBILE ---------- */
 @media(max-width:768px){
-  body{flex-direction:column;}
-  #sidebar{
-    width:100%;
-    height:auto;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-  }
-  .link-btn{
-    flex:1 1 45%;
-    margin:5px;
-    text-align:center;
-  }
-  #viewer{height:70vh;}
-  #topbar span{font-size:12px;}
+  #logo span{font-size:16px;}
+  #logo img{width:32px;height:32px;}
+  .link-btn{font-size:13px;padding:6px 10px;}
+  #preview h1{font-size:36px;}
+  #preview p{font-size:15px;}
 }
-#logo img {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: #fff;
-  padding: 4px;
-}
-
 </style>
 </head>
 
 <body>
-  <div id="sidebar">
+  <!-- Top scroll bar -->
+  <div id="topbar">
     <div id="logo">
-  <img src="logohead.png" alt="Bee Code World Logo">
-  <span>Bee Code World</span>
-</div>
-
-    <h2>🚀 Visit Links</h2>
+      <img src="logohead.png" alt="Bee Code World Logo">
+      <span>Bee Code World</span>
+    </div>
   </div>
 
+  <!-- Viewer area -->
   <div id="viewer">
-    <div id="topbar">
+    <div id="urlbar">
       <span id="current-url">Select a project to view</span>
       <button id="open-btn">Open in New Tab</button>
     </div>
     <iframe id="iframe-viewer" src=""></iframe>
 
+    <!-- Default preview -->
     <div id="preview">
       <h1>🐝 Bee Code World</h1>
-      <p>Tap a project from the left to explore them all 🚀</p>
+      <p>Select any project above to explore</p>
     </div>
   </div>
 
@@ -209,20 +194,20 @@ const links=[
 ];
 // --------------------------------------------
 
-const sidebar=document.getElementById("sidebar");
+const topbar=document.getElementById("topbar");
 const iframe=document.getElementById("iframe-viewer");
 const currentUrl=document.getElementById("current-url");
 const openBtn=document.getElementById("open-btn");
 const preview=document.getElementById("preview");
 let activeIndex=-1;
 
-// create buttons
+// create buttons in scroll bar
 links.forEach((l,i)=>{
   const b=document.createElement("button");
   b.textContent=l.name;
   b.className="link-btn";
   b.onclick=()=>load(i);
-  sidebar.appendChild(b);
+  topbar.appendChild(b);
 });
 
 function load(i){
