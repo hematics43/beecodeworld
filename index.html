@@ -142,14 +142,24 @@ body.loaded .link-btn{
   flex-direction:column;
 }
 #urlbar{
-  background:#020929;
+  background:#182530;
   padding:8px 12px;
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  border-bottom:1px solid #d6e2f1;
+  justify-content:center; /* ← centers the button */
+  border-bottom:1px solid #1d2735;
+  gap:10px;
+  flex-wrap:wrap;
 }
-#urlbar span{color:lch(100% 0.01 296.81);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#urlbar span{
+  color:#ccc;
+  font-size:13px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-align:center;
+}
+
 #open-btn{
   background:var(--accent);
   color:#000;
@@ -239,9 +249,9 @@ body.loaded #preview p{
   <!-- Viewer area -->
   <div id="viewer">
     <div id="urlbar">
-      <span id="current-url">Select a project to view</span>
-      <button id="open-btn">Open in New Tab</button>
-    </div>
+  <button id="open-btn">Open in New Tab</button>
+</div>
+
     <iframe id="iframe-viewer" src=""></iframe>
 
     <!-- Default preview -->
