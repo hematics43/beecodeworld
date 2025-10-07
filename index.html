@@ -1,158 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bee Code World</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Bee Code World</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #101820;
-      color: #f0f0f0;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
+<style>
+/* ---------- BASIC LAYOUT ---------- */
+body{
+  margin:0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:#0f1720;
+  color:#f1f1f1;
+  display:flex;
+  height:100vh;
+  overflow:hidden;
+}
+#sidebar{
+  width:280px;
+  background:#17212e;
+  padding:15px;
+  box-sizing:border-box;
+  overflow-y:auto;
+  border-right:1px solid #1d2735;
+}
+#viewer{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
 
-    /* Sidebar */
-    #sidebar {
-      width: 280px;
-      background: #182530;
-      padding: 15px;
-      box-sizing: border-box;
-      overflow-y: auto;
-      border-right: 1px solid #222;
-    }
+/* ---------- SIDEBAR ---------- */
+#logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+#logo svg{
+  width:40px;height:40px;
+  background:#4fc3f7;
+  border-radius:50%;
+  padding:6px;
+}
+#logo span{
+  font-size:18px;
+  font-weight:700;
+  color:#4fc3f7;
+}
+h2{
+  font-size:16px;
+  margin:10px 0;
+  color:#89c9ff;
+}
+.link-btn{
+  display:block;
+  width:100%;
+  text-align:left;
+  background:#22303d;
+  color:#fff;
+  padding:10px 12px;
+  border:none;
+  border-radius:6px;
+  margin-bottom:8px;
+  cursor:pointer;
+  font-size:14px;
+  transition:0.2s;
+}
+.link-btn:hover{background:#2e4050;}
+.link-btn.active{background:#4fc3f7;color:#000;}
 
-    #sidebar h2 {
-      margin-top: 0;
-      font-size: 18px;
-      color: #4fc3f7;
-    }
+/* ---------- TOP BAR ---------- */
+#topbar{
+  background:#17212e;
+  padding:10px 15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #1d2735;
+}
+#topbar span{color:#ccc;font-size:14px;}
+#open-btn{
+  background:#4fc3f7;
+  color:#000;
+  border:none;
+  border-radius:6px;
+  padding:6px 10px;
+  cursor:pointer;
+  font-weight:bold;
+}
 
-    .link-btn {
-      display: block;
-      width: 100%;
-      text-align: left;
-      background: #22303d;
-      color: #fff;
-      padding: 10px 12px;
-      border: none;
-      border-radius: 6px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: 0.2s;
-    }
+/* ---------- IFRAME ---------- */
+iframe{
+  flex:1;
+  border:none;
+  width:100%;
+  background:#fff;
+}
 
-    .link-btn:hover {
-      background: #2c3e50;
-    }
+/* ---------- DEFAULT PREVIEW ---------- */
+#preview{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 40%,rgba(79,195,247,0.08),transparent 70%);
+}
+#preview h1{
+  font-size:48px;
+  margin:0;
+  color:#4fc3f7;
+  font-weight:800;
+  animation:glow 3s ease-in-out infinite alternate;
+}
+#preview p{
+  font-size:18px;
+  color:#aaa;
+  margin-top:10px;
+}
+@keyframes glow{
+  from{text-shadow:0 0 8px rgba(79,195,247,0.4);}
+  to{text-shadow:0 0 20px rgba(79,195,247,0.9);}
+}
 
-    .link-btn.active {
-      background: #4fc3f7;
-      color: #000;
-    }
+/* ---------- SCROLLBAR ---------- */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-thumb{background:#4fc3f7;border-radius:4px;}
 
-    /* Viewer */
-    #viewer {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-
-    #topbar {
-      background: #182530;
-      padding: 10px 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #222;
-    }
-
-    #topbar span {
-      color: #aaa;
-      font-size: 14px;
-    }
-
-    #open-btn {
-      background: #4fc3f7;
-      color: #000;
-      border: none;
-      border-radius: 6px;
-      padding: 6px 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    iframe {
-      flex: 1;
-      border: none;
-      width: 100%;
-      background: #fff;
-    }
-
-    /* Default preview */
-    #preview-title {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      font-size: 40px;
-      color: #4fc3f7;
-      font-weight: bold;
-      pointer-events: none;
-    }
-
-    #preview-sub {
-      position: absolute;
-      top: calc(50% + 50px);
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-      font-size: 18px;
-      color: #aaa;
-      pointer-events: none;
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #4fc3f7;
-      border-radius: 4px;
-    }
-
-    @media (max-width: 768px) {
-      body {
-        flex-direction: column;
-      }
-      #sidebar {
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-wrap: wrap;
-      }
-      .link-btn {
-        flex: 1 1 45%;
-        margin: 5px;
-      }
-      #viewer {
-        height: 70vh;
-      }
-    }
-  </style>
+/* ---------- MOBILE ---------- */
+@media(max-width:768px){
+  body{flex-direction:column;}
+  #sidebar{
+    width:100%;
+    height:auto;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .link-btn{
+    flex:1 1 45%;
+    margin:5px;
+    text-align:center;
+  }
+  #viewer{height:70vh;}
+  #topbar span{font-size:12px;}
+}
+</style>
 </head>
-<body>
 
+<body>
   <div id="sidebar">
-    <h2>🚀 Visit Links 🚀</h2>
+    <div id="logo">
+  <img src="logohead.png" alt="Bee Code World Logo">
+  <span>Bee Code World</span>
+</div>
+
+    <h2>🚀 Visit Links</h2>
   </div>
 
   <div id="viewer">
@@ -160,79 +168,68 @@
       <span id="current-url">Select a project to view</span>
       <button id="open-btn">Open in New Tab</button>
     </div>
-
     <iframe id="iframe-viewer" src=""></iframe>
 
-    <!-- Default preview -->
-    <div id="preview-title">🐝 Bee Code World</div>
-    <div id="preview-sub">Select any project from the left to explore</div>
+    <div id="preview">
+      <h1>🐝 Bee Code World</h1>
+      <p>Tap a project from the left to explore them all 🚀</p>
+    </div>
   </div>
 
-  <script>
-    // ======== HEMATICS PROJECT LINKS ========
-    const links = [
-      { name: "Love Letter", url: "https://hematics43.github.io/love_letter-1.0/" },
-      { name: "Tower of Hanoi", url: "https://hematics43.github.io/Tower-of-Hanoi/" },
-      { name: "Emoji Match Game", url: "https://hematics43.github.io/EMOJI-MATCH-GAME/" },
-      { name: "Live Code Editor 2.1", url: "https://hematics43.github.io/-Live-Code-Editor-2.1/" },
-      { name: "Glowing Tile Match Game", url: "https://hematics43.github.io/Glowing-Tile-Match-Game/" },
-      { name: "HTML Live Editor 2.0", url: "https://hematics43.github.io/HTML-Live-Editor-2.0/" },
-      { name: "Sudoku Maker 1.0", url: "https://hematics43.github.io/SUDOKU-MAKER-1.0/" },
-      { name: "Dowry Calculator", url: "https://hematics43.github.io/Dowry-Calculator/" },
-      { name: "RPS GOD ARENA", url: "https://hematics43.github.io/RPS-GOD-ARENA/" },
-      { name: "Symmetric World", url: "https://hematics43.github.io/SYMMETRIC-WORLD/" },
-      { name: "Find Path", url: "https://hematics43.github.io/findpath/" },
-      { name: "Emojis Balls UI", url: "https://hematics43.github.io/Emojis-Balls-UI/" },
-      { name: "Gravity Drop Simulation", url: "https://hematics43.github.io/Gravity-Drop-Simulation/" },
-      { name: "Substitution Cipher", url: "https://hematics43.github.io/Substitution-Cipher/" },
-      { name: "Bar 0.1", url: "https://hematics43.github.io/bar-0.1/" },
-      { name: "Memory Book", url: "https://hematics43.github.io/memory-book/" },
-      { name: "Universal Base Converter", url: "https://hematics43.github.io/Universal-Base-Converter-Calculator/" },
-      { name: "Binary Clock", url: "https://hematics43.github.io/Binary-Clock/" }
-    ];
-    // ========================================
+<script>
+// ------------------- LINKS -------------------
+const links=[
+  {name:"Love Letter",url:"https://hematics43.github.io/love_letter-1.0/"},
+  {name:"Tower of Hanoi",url:"https://hematics43.github.io/Tower-of-Hanoi/"},
+  {name:"Emoji Match Game",url:"https://hematics43.github.io/EMOJI-MATCH-GAME/"},
+  {name:"Live Code Editor 2.1",url:"https://hematics43.github.io/-Live-Code-Editor-2.1/"},
+  {name:"Glowing Tile Match Game",url:"https://hematics43.github.io/Glowing-Tile-Match-Game/"},
+  {name:"HTML Live Editor 2.0",url:"https://hematics43.github.io/HTML-Live-Editor-2.0/"},
+  {name:"Sudoku Maker 1.0",url:"https://hematics43.github.io/SUDOKU-MAKER-1.0/"},
+  {name:"Dowry Calculator",url:"https://hematics43.github.io/Dowry-Calculator/"},
+  {name:"RPS GOD ARENA",url:"https://hematics43.github.io/RPS-GOD-ARENA/"},
+  {name:"Symmetric World",url:"https://hematics43.github.io/SYMMETRIC-WORLD/"},
+  {name:"Find Path",url:"https://hematics43.github.io/findpath/"},
+  {name:"Emojis Balls UI",url:"https://hematics43.github.io/Emojis-Balls-UI/"},
+  {name:"Gravity Drop Simulation",url:"https://hematics43.github.io/Gravity-Drop-Simulation/"},
+  {name:"Substitution Cipher",url:"https://hematics43.github.io/Substitution-Cipher/"},
+  {name:"Bar 0.1",url:"https://hematics43.github.io/bar-0.1/"},
+  {name:"Memory Book",url:"https://hematics43.github.io/memory-book/"},
+  {name:"Universal Base Converter",url:"https://hematics43.github.io/Universal-Base-Converter-Calculator/"},
+  {name:"Binary Clock",url:"https://hematics43.github.io/Binary-Clock/"}
+];
+// --------------------------------------------
 
-    const sidebar = document.getElementById("sidebar");
-    const iframe = document.getElementById("iframe-viewer");
-    const currentUrl = document.getElementById("current-url");
-    const openBtn = document.getElementById("open-btn");
-    const title = document.getElementById("preview-title");
-    const subtitle = document.getElementById("preview-sub");
+const sidebar=document.getElementById("sidebar");
+const iframe=document.getElementById("iframe-viewer");
+const currentUrl=document.getElementById("current-url");
+const openBtn=document.getElementById("open-btn");
+const preview=document.getElementById("preview");
+let activeIndex=-1;
 
-    let activeIndex = -1;
+// create buttons
+links.forEach((l,i)=>{
+  const b=document.createElement("button");
+  b.textContent=l.name;
+  b.className="link-btn";
+  b.onclick=()=>load(i);
+  sidebar.appendChild(b);
+});
 
-    // Create sidebar buttons
-    links.forEach((link, i) => {
-      const btn = document.createElement("button");
-      btn.textContent = link.name;
-      btn.className = "link-btn";
-      btn.onclick = () => loadLink(i);
-      sidebar.appendChild(btn);
-    });
+function load(i){
+  const {name,url}=links[i];
+  iframe.src=url;
+  currentUrl.textContent=`${name} — ${url}`;
+  document.querySelectorAll(".link-btn").forEach(btn=>btn.classList.remove("active"));
+  document.querySelectorAll(".link-btn")[i].classList.add("active");
+  preview.style.display="none";
+  activeIndex=i;
+}
 
-    function loadLink(i) {
-      const { name, url } = links[i];
-      iframe.src = url;
-      currentUrl.textContent = `${name} — ${url}`;
-
-      document.querySelectorAll(".link-btn").forEach((b) => b.classList.remove("active"));
-      document.querySelectorAll(".link-btn")[i].classList.add("active");
-
-      // Hide the default title when a project is loaded
-      title.style.display = "none";
-      subtitle.style.display = "none";
-
-      activeIndex = i;
-    }
-
-    openBtn.onclick = () => {
-      if (activeIndex >= 0) {
-        window.open(links[activeIndex].url, "_blank");
-      } else {
-        alert("Please select a project first!");
-      }
-    };
-  </script>
-
+openBtn.onclick=()=>{
+  if(activeIndex>=0) window.open(links[activeIndex].url,"_blank");
+  else alert("Please select a project first!");
+};
+</script>
 </body>
 </html>
