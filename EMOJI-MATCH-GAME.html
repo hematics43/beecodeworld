@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced Emoji Match Game</title>
+  <style>
+    .glow-tile-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #00ccff;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 0 15px #00ccff, 0 0 30px #00ccff;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  z-index: 9999;
+}
+
+.glow-tile-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #00ccff, 0 0 40px #00ccff;
+}
+
+    :root {
+      --card-size: 90px;
+      --primary-color: #ff6f61;
+      --bg-light: #fff7f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI Emoji', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #ffe3e3, var(--bg-light));
+      padding: 30px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 2.5rem;
+      color: #444;
+    }
+
+    #controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+      justify-content: center;
+    }
+
+    select, button {
+      padding: 10px 18px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    select {
+      background: #fff;
+      border: 2px solid #ccc;
+    }
+
+    button {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    button:hover {
+      background: #e85a52;
+      transform: scale(1.05);
+    }
+
+    #scoreboard {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 25px;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    #game-board {
+      display: grid;
+      gap: 14px;
+      justify-content: center;
+    }
+
+    .card {
+      width: var(--card-size);
+      height: var(--card-size);
+      position: relative;
+      perspective: 800px;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s ease;
+      transform-style: preserve-3d;
+      position: absolute;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      backface-visibility: hidden;
+    }
+
+    .card-front {
+      background: #fff;
+      border: 2px solid #ccc;
+    }
+
+    .card-back {
+      background: var(--primary-color);
+      color: #fff;
+      transform: rotateY(180deg);
+    }
+
+    #win-popup {
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 10;
+      text-align: center;
+    }
+
+    #win-popup h2 {
+      margin-top: 0;
+      font-size: 1.8rem;
+    }
+
+    @media (max-width: 600px) {
+      :root { --card-size: 70px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Emoji Match Game</h1>
+
+  <div id="controls">
+    <select id="difficulty">
+      <option value="easy">🟢 Easy (4x4)</option>
+      <option value="medium">🟡 Medium (5x4)</option>
+      <option value="hard">🔴 Hard (6x5)</option>
+    </select>
+    <button id="restart-btn">🔁 Restart</button>
+  </div>
+
+  <div id="scoreboard">
+    <span>🧮 Moves: <strong id="move-count">0</strong></span>
+    <span>⏱️ Time: <strong id="timer">0s</strong></span>
+  </div>
+
+  <div id="game-board"></div>
+
+  <div id="win-popup">
+    <h2>🎉 You Win!</h2>
+    <p>Moves: <span id="final-moves">0</span></p>
+    <p>Time: <span id="final-time">0</span>s</p>
+    <button onclick="closeWin()">Play Again</button>
+  </div>
+
+  <script>
+    const emojiPool = [
+      "🍕", "🐱", "⚽", "🎧", "🚗", "🎈", "🌟", "🍩",
+      "🐶", "📱", "🏀", "🧸", "🍉", "🎮", "🌈",
+      "🚀", "🎂", "🍔", "💎", "🎤", "🥁", "🧠", "🦄", "💡", "📸", "✈️"
+    ];
+
+    const difficultyMap = {
+      easy: { cols: 4, rows: 4, pairs: 8 },
+      medium: { cols: 5, rows: 4, pairs: 10 },
+      hard: { cols: 6, rows: 5, pairs: 15 }
+    };
+
+    let flipped = [], matched = 0, moves = 0, timer = 0, timerInterval = null;
+    let settings = difficultyMap["easy"];
+
+    const board = document.getElementById("game-board");
+    const moveCount = document.getElementById("move-count");
+    const timerDisplay = document.getElementById("timer");
+    const restartBtn = document.getElementById("restart-btn");
+    const difficulty = document.getElementById("difficulty");
+    const winPopup = document.getElementById("win-popup");
+    const finalMoves = document.getElementById("final-moves");
+    const finalTime = document.getElementById("final-time");
+
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function createCard(emoji) {
+      const card = document.createElement("div");
+      card.classList.add("card");
+
+      const cardInner = document.createElement("div");
+      cardInner.classList.add("card-inner");
+
+      const front = document.createElement("div");
+      front.classList.add("card-front");
+      front.textContent = "❓";
+
+      const back = document.createElement("div");
+      back.classList.add("card-back");
+      back.textContent = emoji;
+
+      cardInner.appendChild(front);
+      cardInner.appendChild(back);
+      card.appendChild(cardInner);
+
+      card.addEventListener("click", () => {
+        if (card.classList.contains("flipped") || flipped.length === 2) return;
+
+        card.classList.add("flipped");
+        flipped.push({ card, emoji });
+
+        if (flipped.length === 2) {
+          moves++;
+          moveCount.textContent = moves;
+          setTimeout(checkMatch, 600);
+        }
+      });
+
+      return card;
+    }
+
+    function checkMatch() {
+      const [first, second] = flipped;
+      if (first.emoji === second.emoji) {
+        matched++;
+        if (matched === settings.pairs) {
+          clearInterval(timerInterval);
+          finalMoves.textContent = moves;
+          finalTime.textContent = timer;
+          setTimeout(() => winPopup.style.display = "block", 500);
+        }
+      } else {
+        first.card.classList.remove("flipped");
+        second.card.classList.remove("flipped");
+      }
+      flipped = [];
+    }
+
+    function setupGame() {
+      board.innerHTML = "";
+      flipped = [];
+      matched = 0;
+      moves = 0;
+      timer = 0;
+      moveCount.textContent = "0";
+      timerDisplay.textContent = "0s";
+      winPopup.style.display = "none";
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timer++;
+        timerDisplay.textContent = `${timer}s`;
+      }, 1000);
+
+      settings = difficultyMap[difficulty.value];
+      board.style.gridTemplateColumns = `repeat(${settings.cols}, var(--card-size))`;
+
+      const selected = shuffle([...emojiPool]).slice(0, settings.pairs);
+      const fullSet = shuffle([...selected, ...selected]);
+
+      fullSet.forEach(e => board.appendChild(createCard(e)));
+    }
+
+    function closeWin() {
+      winPopup.style.display = "none";
+      setupGame();
+    }
+
+    difficulty.addEventListener("change", setupGame);
+    restartBtn.addEventListener("click", setupGame);
+
+    // Initial Game Start
+    setupGame();
+  </script>
+<a href="https://hematics43.github.io/Glowing-Tile-Match-Game/" target="_blank" class="glow-tile-button">
+  🧩 Play Tile Match
+</a>
+
+</body>
+</html>
