@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live🔴Board</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <style>
+    body, html {
+      margin: 0; padding: 0;
+      height: 100%; width: 100%;
+      background: #222; color: white;
+      font-family: Arial, sans-serif;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    #header {
+      background: #111; text-align: center;
+      font-size: 10px; font-weight: bold;
+      padding: 1px; border-bottom: 0.1px solid #444;
+      flex-shrink: 0;
+    }
+    #topToolbar, #bottomToolbar {
+      background: rgba(0,0,0,0.9);
+      padding: 6px; display: flex; justify-content: center;
+      align-items: center; gap: 10px; flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    #canvasContainer { flex-grow: 1; display: flex; justify-content: center; align-items: center; background: #000; }
+    canvas { width: 100%; height: 100%; display: block; background: #fff; touch-action: none; }
+
+    button, select { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; }
+
+    #clearBtn { background: red; color: #fff; }
+    #eraserBtn { background: gray; color: #fff; }
+    #downloadBtn { background: green; color: #fff; }
+    #deleteImgBtn { background: darkorange; color: #fff; }
+
+    #fullscreenBtn {
+      position: fixed; bottom: 60px; right: 15px;
+      background: #000; color: #fff;
+      font-size: 20px; border-radius: 50%;
+      width: 45px; height: 45px; display: flex;
+      align-items: center; justify-content: center;
+      border: 2px solid #444; z-index: 30;
+    }
+
+    /* Emoji Panel */
+    #emojiPanel {
+      max-height: 100px;
+      overflow-x: auto; overflow-y: hidden;
+      white-space: nowrap; background: #111;
+      padding: 6px; border-top: 2px solid #444;
+      flex-shrink: 0;
+    }
+    .emojiOption {
+      font-size: 22px; padding: 6px; cursor: pointer;
+      display: inline-block;
+    }
+    .emojiOption:hover { background: #333; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div id="header">Live🔴Board...All can be live at the same time</div>
+
+  <!-- Top Toolbar -->
+  <div id="topToolbar">
+    <label>✏️ Color: <input type="color" id="colorPicker" value="#000000"></label>
+    <label>📏 Size: <input type="range" id="sizePicker" min="1" max="30" value="3"></label>
+    <label>🎨 Background: <input type="color" id="bgColorPicker" value="#ffffff"></label>
+  </div>
+
+  <!-- Canvas -->
+  <div id="canvasContainer">
+    <canvas id="board"></canvas>
+  </div>
+
+  <!-- Emoji Panel -->
+  <div id="emojiPanel">
+  <!-- Smileys -->
+  <span class="emojiOption">😀</span><span class="emojiOption">😁</span><span class="emojiOption">😂</span>
+  <span class="emojiOption">🤣</span><span class="emojiOption">😊</span><span class="emojiOption">😍</span>
+  <span class="emojiOption">😘</span><span class="emojiOption">😎</span><span class="emojiOption">🤔</span>
+  <span class="emojiOption">😴</span><span class="emojiOption">😭</span><span class="emojiOption">😡</span>
+  <span class="emojiOption">🥳</span><span class="emojiOption">🙌</span><span class="emojiOption">❤️</span>
+  <span class="emojiOption">👍</span><span class="emojiOption">👎</span><span class="emojiOption">🔥</span>
+  <span class="emojiOption">🌟</span><span class="emojiOption">💡</span><span class="emojiOption">🎉</span>
+  <span class="emojiOption">🚀</span><span class="emojiOption">⚡</span><span class="emojiOption">🌈</span>
+
+  <!-- Objects / School -->
+  <span class="emojiOption">📚</span><span class="emojiOption">✏️</span><span class="emojiOption">🖌️</span>
+  <span class="emojiOption">🎨</span><span class="emojiOption">📖</span><span class="emojiOption">🧠</span>
+  <span class="emojiOption">💻</span><span class="emojiOption">📱</span><span class="emojiOption">🔬</span>
+  <span class="emojiOption">📐</span><span class="emojiOption">📊</span><span class="emojiOption">📝</span>
+
+  <!-- Nature / Food -->
+  <span class="emojiOption">🌍</span><span class="emojiOption">☀️</span><span class="emojiOption">🌙</span>
+  <span class="emojiOption">⭐</span><span class="emojiOption">🌸</span><span class="emojiOption">🍎</span>
+  <span class="emojiOption">🍕</span><span class="emojiOption">🍔</span><span class="emojiOption">🍩</span>
+  <span class="emojiOption">🥤</span><span class="emojiOption">🍪</span><span class="emojiOption">🍇</span>
+
+  <!-- Sports / Awards -->
+  <span class="emojiOption">🥇</span><span class="emojiOption">🥈</span><span class="emojiOption">🥉</span>
+  <span class="emojiOption">🏆</span><span class="emojiOption">⚽</span><span class="emojiOption">🏀</span>
+  <span class="emojiOption">🎾</span><span class="emojiOption">🏏</span><span class="emojiOption">🏓</span>
+
+  <!-- Animals -->
+  <span class="emojiOption">🐶</span><span class="emojiOption">🐱</span><span class="emojiOption">🐭</span>
+  <span class="emojiOption">🐰</span><span class="emojiOption">🦊</span><span class="emojiOption">🐻</span>
+  <span class="emojiOption">🐼</span><span class="emojiOption">🐸</span><span class="emojiOption">🐧</span>
+  <span class="emojiOption">🐢</span><span class="emojiOption">🐙</span><span class="emojiOption">🐠</span>
+</div>
+
+
+  <!-- Bottom Toolbar -->
+  <div id="bottomToolbar">
+    <input type="file" id="uploadImage" accept="image/*">
+    <button id="deleteImgBtn">❌ Delete Image</button>
+    <button id="eraserBtn">🩹 Eraser</button>
+    <button id="clearBtn">🧹 Clear</button>
+    <button id="downloadBtn">💾 Download</button>
+  </div>
+
+  <!-- Fullscreen -->
+  <div id="fullscreenBtn">⛶</div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <script>
+    // ✅ Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCIDLsM2YKD2Uw5C_v-n97P5wz4eSUfO_M",
+      authDomain: "liveboard-fb357.firebaseapp.com",
+      databaseURL: "https://liveboard-fb357-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "liveboard-fb357",
+      storageBucket: "liveboard-fb357.firebasestorage.app",
+      messagingSenderId: "85829681917",
+      appId: "1:85829681917:web:3e82b038cba88db0e5b494"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const canvas = document.getElementById("board");
+    const ctx = canvas.getContext("2d");
+    const colorPicker = document.getElementById("colorPicker");
+    const sizePicker = document.getElementById("sizePicker");
+    const bgColorPicker = document.getElementById("bgColorPicker");
+    const uploadImage = document.getElementById("uploadImage");
+    const deleteImgBtn = document.getElementById("deleteImgBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const eraserBtn = document.getElementById("eraserBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const emojiPanel = document.getElementById("emojiPanel");
+
+    let drawing = false, lastX=0, lastY=0, brushColor=colorPicker.value, brushSize=sizePicker.value;
+    let erasing=false, currentBgColor="#ffffff", linesCache=[], emojiCache=[], bgImage=null;
+    let selectedEmoji="", draggingEmoji=null, lastTapTime=0;
+
+    function resizeCanvas(){ canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight; redrawAll(); }
+    window.addEventListener("resize",resizeCanvas); resizeCanvas();
+
+    function drawLine(x1,y1,x2,y2,color,size){
+      ctx.strokeStyle=color; ctx.lineWidth=size; ctx.lineCap="round";
+      ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    }
+    function drawEmoji(x,y,emoji,size=brushSize){
+      ctx.font=`${size*10}px Arial`; ctx.textAlign="center"; ctx.textBaseline="middle";
+      ctx.fillText(emoji,x,y);
+    }
+    function redrawAll(){
+      ctx.fillStyle=currentBgColor; ctx.fillRect(0,0,canvas.width,canvas.height);
+      if(bgImage){ let r=bgImage.width/bgImage.height, cr=canvas.width/canvas.height, w,h,ox,oy;
+        if(r>cr){w=canvas.width;h=w/r;ox=0;oy=(canvas.height-h)/2;}else{h=canvas.height;w=h*r;ox=(canvas.width-w)/2;oy=0;}
+        ctx.drawImage(bgImage,ox,oy,w,h);
+      }
+      linesCache.forEach(l=>drawLine(l.x1,l.y1,l.x2,l.y2,l.color,l.size));
+      emojiCache.forEach(e=>drawEmoji(e.x,e.y,e.emoji,e.size));
+    }
+
+    function drawAndSave(x,y){
+      if(selectedEmoji){
+        const item={x,y,emoji:selectedEmoji,size:brushSize};
+        const ref=db.ref("blackboard/emojis").push(); item._key=ref.key; ref.set(item);
+      } else {
+        const color=erasing?currentBgColor:brushColor;
+        const line={x1:lastX,y1:lastY,x2:x,y2:y,color,size:brushSize};
+        drawLine(line.x1,line.y1,line.x2,line.y2,line.color,line.size);
+        db.ref("blackboard/lines").push(line);
+      }
+      [lastX,lastY]=[x,y];
+    }
+
+    function findEmojiAt(x,y){
+      return emojiCache.find(e=>{
+        const s=e.size*10; return x>e.x-s/2 && x<e.x+s/2 && y>e.y-s/2 && y<e.y+s/2;
+      });
+    }
+
+    function startAction(x,y){
+      const now=Date.now();
+      const tapped=findEmojiAt(x,y);
+      if(tapped && now-lastTapTime<300){ // double tap = copy
+        const newItem={...tapped,x:tapped.x+20,y:tapped.y+20};
+        const ref=db.ref("blackboard/emojis").push(); newItem._key=ref.key; ref.set(newItem);
+        lastTapTime=0; return;
+      }
+      lastTapTime=now;
+
+      if(selectedEmoji){ drawAndSave(x,y); selectedEmoji=""; }
+      else if(tapped){ draggingEmoji=tapped; }
+      else { drawing=true; [lastX,lastY]=[x,y]; }
+    }
+
+    function moveAction(x,y){
+      if(draggingEmoji){ draggingEmoji.x=x; draggingEmoji.y=y;
+        db.ref("blackboard/emojis/"+draggingEmoji._key).set(draggingEmoji);
+      } else if(drawing){ drawAndSave(x,y); }
+    }
+
+    function stopAction(){ drawing=false; draggingEmoji=null; }
+
+    // Mouse
+    canvas.addEventListener("mousedown",e=>startAction(e.offsetX,e.offsetY));
+    canvas.addEventListener("mousemove",e=>moveAction(e.offsetX,e.offsetY));
+    canvas.addEventListener("mouseup",stopAction); canvas.addEventListener("mouseleave",stopAction);
+
+    // Touch
+    canvas.addEventListener("touchstart",e=>{e.preventDefault();const r=canvas.getBoundingClientRect();const t=e.touches[0];startAction(t.clientX-r.left,t.clientY-r.top);});
+    canvas.addEventListener("touchmove",e=>{e.preventDefault();const r=canvas.getBoundingClientRect();const t=e.touches[0];moveAction(t.clientX-r.left,t.clientY-r.top);});
+    canvas.addEventListener("touchend",stopAction);
+
+    // Firebase sync
+    db.ref("blackboard/lines").on("child_added", snap => {
+      const line = snap.val();
+      linesCache.push(line);
+      drawLine(line.x1, line.y1, line.x2, line.y2, line.color, line.size);
+    });
+    db.ref("blackboard/emojis").on("child_added",snap=>{const it=snap.val();it._key=snap.key;emojiCache.push(it);drawEmoji(it.x,it.y,it.emoji,it.size);});
+    db.ref("blackboard/emojis").on("child_changed",snap=>{const u=snap.val();u._key=snap.key;emojiCache=emojiCache.map(e=>e._key===snap.key?u:e);redrawAll();});
+    db.ref("blackboard").on("child_removed",()=>{linesCache=[];emojiCache=[];redrawAll();});
+
+    // Tools
+    colorPicker.oninput=()=>{brushColor=colorPicker.value;erasing=false;};
+    sizePicker.oninput=()=>{brushSize=sizePicker.value;};
+    eraserBtn.onclick=()=>{erasing=!erasing;eraserBtn.style.background=erasing?"orange":"gray";};
+    bgColorPicker.oninput=()=>{currentBgColor=bgColorPicker.value;db.ref("background").set(currentBgColor);redrawAll();};
+    db.ref("background").on("value",snap=>{if(snap.exists()){currentBgColor=snap.val();bgColorPicker.value=currentBgColor;redrawAll();}});
+    clearBtn.onclick=()=>{db.ref("blackboard").remove();db.ref("background").set(currentBgColor);db.ref("image").remove();};
+    uploadImage.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>db.ref("image").set(ev.target.result);r.readAsDataURL(f);};
+    db.ref("image").on("value",snap=>{if(snap.exists()){const i=new Image();i.onload=()=>{bgImage=i;redrawAll();};i.src=snap.val();}else{bgImage=null;redrawAll();}});
+    deleteImgBtn.onclick=()=>db.ref("image").remove();
+    downloadBtn.onclick=()=>{const l=document.createElement("a");l.download="blackboard.png";l.href=canvas.toDataURL("image/png");l.click();};
+    fullscreenBtn.onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();};
+
+    // Emoji Panel clicks
+    emojiPanel.addEventListener("click",e=>{if(e.target.classList.contains("emojiOption")){selectedEmoji=e.target.textContent;erasing=false;}});
+  </script>
+</body>
+</html>
